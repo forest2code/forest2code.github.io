@@ -1,3 +1,6 @@
+# f2c的博客
+---
+
 ## 关于我
 ---
 
@@ -8,4 +11,4 @@
 ## 2023
 ---
 
-- 2023.3.6： [关于我](https://github.com/forest2code/forest2code.github.io/tree/master/Blogs/01.Aboutme.md)
+- 2023-3-6： [关于我](https://github.com/forest2code/forest2code.github.io/tree/master/Blogs/01.Aboutme.md)
