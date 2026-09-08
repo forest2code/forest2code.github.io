@@ -11,59 +11,6 @@ POSTS_DIR = SITE_DIR / "posts"
 DIST_DIR = SITE_DIR / "dist"
 ASSETS_DIR = SITE_DIR / "assets"
 
-def normalize_markdown(text):
-    lines = text.split('\n')
-    new_lines = []
-    list_pattern = re.compile(r'^(\s*)([-*+]|\d+\.)\s+(.*)')
-
-    # 1. 自动在非空段落与列表项之间补空行（解决段落紧贴列表导致列表不解析的问题）
-    for i, line in enumerate(lines):
-        m = list_pattern.match(line)
-        if m:
-            if new_lines and new_lines[-1].strip() and not list_pattern.match(new_lines[-1]) and not new_lines[-1].strip().startswith('#'):
-                new_lines.append('')
-        new_lines.append(line)
-
-    # 2. 智能列表缩进规范化（支持 2 空格子列表嵌套，修复首层误加 4 空格被识别为代码块的问题）
-    result = []
-    i = 0
-    while i < len(new_lines):
-        line = new_lines[i]
-        m = list_pattern.match(line)
-        if m:
-            list_block = []
-            while i < len(new_lines):
-                curr = new_lines[i]
-                if list_pattern.match(curr) or (list_block and (curr.startswith(' ') or curr.startswith('\t'))):
-                    list_block.append(curr)
-                    i += 1
-                elif list_block and not curr.strip():
-                    if i + 1 < len(new_lines) and (list_pattern.match(new_lines[i+1]) or new_lines[i+1].startswith(' ')):
-                        list_block.append(curr)
-                        i += 1
-                    else:
-                        break
-                else:
-                    break
-            
-            bullet_indents = [len(l) - len(l.lstrip(' ')) for l in list_block if list_pattern.match(l)]
-            base_indent = min(bullet_indents) if bullet_indents else 0
-            
-            for l in list_block:
-                if not l.strip():
-                    result.append('')
-                    continue
-                indent = len(l) - len(l.lstrip(' '))
-                rel_indent = max(0, indent - base_indent)
-                level = rel_indent // 2
-                mapped_indent = '    ' * level
-                result.append(mapped_indent + l.lstrip(' '))
-        else:
-            result.append(line)
-            i += 1
-
-    return '\n'.join(result)
-
 def parse_markdown(file_path):
     with open(file_path, "r", encoding="utf-8-sig") as f:
         raw_text = f.read()
@@ -108,9 +55,6 @@ def parse_markdown(file_path):
     year = meta["date"][:4] if meta.get("date") and len(str(meta["date"])) >= 4 else "misc"
     slug = file_path.stem
     output_rel = f"posts/{year}/{slug}.html"
-    
-    # Preprocess content to ensure perfect list and linebreak rendering
-    normalized_content = normalize_markdown(content)
 
     # Convert markdown to html with code highlighting
     md_converter = markdown.Markdown(
@@ -118,8 +62,7 @@ def parse_markdown(file_path):
             "fenced_code",
             "codehilite",
             "tables",
-            "toc",
-            "nl2br"
+            "toc"
         ],
         extension_configs={
             "codehilite": {
@@ -128,7 +71,7 @@ def parse_markdown(file_path):
             }
         }
     )
-    html_body = md_converter.convert(normalized_content)
+    html_body = md_converter.convert(content)
     
     return {
         "title": meta["title"],
