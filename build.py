@@ -83,6 +83,8 @@ def parse_markdown(file_path):
         "meta": meta
     }
 
+BUILD_VERSION = int(datetime.now().timestamp())
+
 def get_base_html(title, content_html, is_root=False):
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -98,7 +100,7 @@ def get_base_html(title, content_html, is_root=False):
       }}
     }})();
   </script>
-  <link rel="stylesheet" type="text/css" href="/assets/main.css">
+  <link rel="stylesheet" type="text/css" href="/assets/main.css?v={BUILD_VERSION}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
