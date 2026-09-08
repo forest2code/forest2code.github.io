@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Modern Terminal Minimalist Theme with CSS Variables & Dark Mode
  */
 :root {
@@ -114,10 +114,9 @@ header {
 }
 
 .menu {
-  border-top: dashed 1px var(--border-color);
   border-bottom: dashed 1px var(--border-color);
-  margin-bottom: 25px;
-  padding: 10px 0;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -133,7 +132,7 @@ header {
 
 .menu ul li {
   display: inline;
-  margin-right: 14px;
+  margin-right: 18px;
 }
 
 .menu ul li a {
@@ -142,24 +141,35 @@ header {
 
 .theme-toggle {
   background: none;
-  border: 1px solid var(--border-color);
+  border: none;
   color: var(--text-color);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
-  padding: 3px 8px;
-  border-radius: 2px;
+  padding: 2px 4px;
+  text-decoration: underline;
   transition: all 0.2s ease;
 }
 
 .theme-toggle:hover {
+  text-decoration: none;
   background-color: var(--link-hover-bg);
   color: var(--link-hover-color);
 }
 
 /**
- * Main Content & Article
+ * Main Content & Post Lists
  */
+main > ul, section > ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+main > ul > li, section > ul > li {
+  margin-bottom: 0.6em;
+  line-height: 1.6;
+}
 article p {
   white-space: normal;
   line-height: 1.8;

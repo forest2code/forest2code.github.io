@@ -118,7 +118,6 @@ def get_base_html(title, content_html, is_root=False):
           <li><a href="/">/root</a></li>
           <li><a href="/archive.html">/archive</a></li>
           <li><a href="/about/">/about</a></li>
-          <li><a href="https://github.com/forest2code">/github</a></li>
         </ul>
         <button id="theme-btn" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">[auto]</button>
       </nav>
@@ -201,7 +200,7 @@ def build():
     # Generate index.html (Root)
     index_items = []
     for post in posts:
-        index_items.append(f'<li>[ {post["date"]} ] <a href="{post["url"]}">{post["title"]}</a></li>')
+        index_items.append(f'<li>- [ {post["date"]} ] <a href="{post["url"]}">{post["title"]}</a></li>')
     index_list_html = "\n        ".join(index_items) if index_items else "<li>暂无文章</li>"
     
     index_content = f"""<ul>
@@ -223,7 +222,7 @@ def build():
     for year in sorted(years.keys(), reverse=True):
         items = []
         for post in years[year]:
-            items.append(f'<li><time>{post["date"]} - </time><a href="{post["url"]}">{post["title"]}</a></li>')
+            items.append(f'<li>- <time>{post["date"]} - </time><a href="{post["url"]}">{post["title"]}</a></li>')
         items_html = "\n        ".join(items)
         archive_sections.append(f"""<section>
       <h3>{year}</h3>
