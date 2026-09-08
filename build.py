@@ -90,7 +90,15 @@ def get_base_html(title, content_html, is_root=False):
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
-  <link rel="stylesheet" type="text/css" href="/assets/main-light.css">
+  <script>
+    (function() {{
+      var saved = localStorage.getItem('theme');
+      if (saved) {{
+        document.documentElement.setAttribute('data-theme', saved);
+      }}
+    }})();
+  </script>
+  <link rel="stylesheet" type="text/css" href="/assets/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
@@ -101,24 +109,6 @@ def get_base_html(title, content_html, is_root=False):
             ],
             throwOnError: false
           }});"></script>
-  <style>
-    article p {{ white-space: normal; line-height: 1.8; margin-bottom: 1.2em; }}
-    article ul, article ol {{ margin-bottom: 1.2em; padding-left: 24px; }}
-    article ul li {{ list-style-type: disc; margin-bottom: 0.4em; }}
-    article ul li:before {{ content: none; }}
-    article ol li {{ list-style-type: decimal; margin-bottom: 0.4em; }}
-    article ol li:before {{ content: none; }}
-    article blockquote {{ border-left: 3px solid #000; margin: 1em 0; padding-left: 15px; color: #555; }}
-    .katex-display {{ overflow-x: auto; overflow-y: hidden; padding: 5px 0; }}
-    pre {{ margin-bottom: 1.2em; }}
-    .highlight pre {{ background: #1a1a1a; color: #d4d4d4; padding: 14px; border-radius: 3px; overflow-x: auto; line-height: 1.5; font-size: 15px; border: 1px solid #333; }}
-    .highlight .k, .highlight .kd, .highlight .kn {{ color: #569cd6; font-weight: bold; }}
-    .highlight .nf, .highlight .fm {{ color: #dcdcaa; }}
-    .highlight .s2, .highlight .s1, .highlight .s {{ color: #ce9178; }}
-    .highlight .nb {{ color: #4ec9b0; }}
-    .highlight .c1, .highlight .c, .highlight .cm {{ color: #6a9955; font-style: italic; }}
-    .highlight .mi, .highlight .mf {{ color: #b5cea8; }}
-  </style>
 </head>
 <body>
   <div class="container">
@@ -130,6 +120,7 @@ def get_base_html(title, content_html, is_root=False):
           <li><a href="/about/">/about</a></li>
           <li><a href="https://github.com/forest2code">/github</a></li>
         </ul>
+        <button id="theme-btn" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">[auto]</button>
       </nav>
     </header>
     <main>
@@ -139,6 +130,28 @@ def get_base_html(title, content_html, is_root=False):
       <p>学无止境.</p>
     </footer>
   </div>
+  <script>
+    function toggleTheme() {{
+      var current = document.documentElement.getAttribute('data-theme');
+      var isDark = current === 'dark' || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      var next = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeBtn();
+    }}
+    function updateThemeBtn() {{
+      var btn = document.getElementById('theme-btn');
+      if (!btn) return;
+      var current = document.documentElement.getAttribute('data-theme');
+      if (!current) {{
+        var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        btn.textContent = isDark ? '[dark]' : '[light]';
+      }} else {{
+        btn.textContent = current === 'dark' ? '[dark]' : '[light]';
+      }}
+    }}
+    updateThemeBtn();
+  </script>
 </body>
 </html>
 """
