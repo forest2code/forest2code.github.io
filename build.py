@@ -160,7 +160,10 @@ def get_base_html(title, content_html, is_root=False):
 def build():
     print("Building site...")
     DIST_DIR.mkdir(parents=True, exist_ok=True)
-    (DIST_DIR / "posts").mkdir(parents=True, exist_ok=True)
+    posts_dist = DIST_DIR / "posts"
+    if posts_dist.exists():
+        shutil.rmtree(posts_dist, ignore_errors=True)
+    posts_dist.mkdir(parents=True, exist_ok=True)
 
     # Copy assets
     if ASSETS_DIR.exists():
