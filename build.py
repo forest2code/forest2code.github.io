@@ -67,7 +67,7 @@ def parse_markdown(file_path):
         extension_configs={
             "codehilite": {
                 "css_class": "highlight",
-                "guess_lang": False
+                "guess_lang": True
             }
         }
     )
